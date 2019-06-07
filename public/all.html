@@ -1,0 +1,18 @@
+<!DOCTYPE HTML>
+<html lang="en">
+  <head>
+    <title>Sensor Data</title>
+  </head>
+  <body>
+    <h1>Sensor Data</h1>
+    <script>
+    	getData();
+
+    	async function getData(){
+    		const response = await fetch('/api');
+    		const data = await response.json();
+    		console.log(data);
+    	}
+    </script>
+  </body>
+</html>
