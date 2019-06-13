@@ -1,4 +1,52 @@
-p {
-  padding: 10px;
-  background-color: #ffaaff;
+.container {
+	display: grid;
+	grid-template-columns: 3fr 4fr 4fr;
+	grid-auto-rows: 100px;
+}
+.title{
+	padding: 25px;
+	grid-row-start: 1;
+	grid-row-end: 2;
+	grid-column-start: 1;
+	grid-column-end: 4;
+	justify-self: center;
+	justify-items: stretch;
+}
+.dataTable{
+	grid-column-start: 1;
+	grid-column-end: 2;
+}
+table, th, td{
+	border: 1px solid black;
+}
+th {
+  text-align: left;
+}
+.chart1{
+	padding: 25px;
+	grid-row-start: 2;
+	grid-row-end: 6;
+	grid-column-start: 2;
+	grid-column-end: 3;
+}
+.chart2{
+	padding: 25px;
+	grid-row-start: 2;
+	grid-row-end: 6;
+	grid-column-start: 3;
+	grid-column-end: 4;
+}
+.chart3{
+	padding: 25px;
+	grid-row-start: 6;
+	grid-row-end: 11;
+	grid-column-start: 2;
+	grid-column-end: 3;
+}
+.chart4{
+	padding: 25px;
+	grid-row-start: 6;
+	grid-row-end: 11;
+	grid-column-start: 3;
+	grid-column-end: 4;
 }

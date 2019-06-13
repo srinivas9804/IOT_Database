@@ -40,8 +40,9 @@ MongoClient.connect(url, function(err, db) {  // To insert a document into the c
   		const timestamp = Date.now();
   		data.timestamp = timestamp;
   		dbo.collection('Sensor').insertOne(data, (err, res) => {
-  		if (err) 
+  		if (err) {
   			throw err;
+  		}
   		else 
   			console.log('Added element to collection');
   		});

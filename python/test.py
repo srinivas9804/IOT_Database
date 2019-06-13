@@ -8,9 +8,21 @@ ts = dt.timestamp()#make sure to divide timestamp by 1000 to obtain
 print(ts," ", dt)
 
 if __name__ == '__main__':
-	myclient = pymongo.MongoClient("mongodb://localhost:27017/")
-	mydb = myclient["mydb"]
-	mycol = mydb["Sensor"]
-
-	mydict = { "temperature": 105, "humidity": 45, "timestamp" : int(ts*1000.0)}
-	x = mycol.insert_one(mydict)
+    myclient = pymongo.MongoClient("mongodb://testUser:135246798@192.168.1.234:27017/mydb")#:27017
+    mydb = myclient['mydb']
+    mycol = mydb["Sensor"]
+    ser = serial.Serial('/dev/ttyUSB0', timeout=None)
+    
+    while(True):
+        line = ser.readlines(1)
+        print(type(line))
+        string = line.decode("utf-8")
+        print(string)
+        string = string[:-2]
+        arr = string.split(',')
+        print(arr)
+        dt = datetime.datetime.now()
+        ts = dt.timestamp()
+        mydict = {'timestamp':int(ts*1000.0),'light': float(arr[0]),'temperature': float(arr[1]),'moisture':float(arr[2]),'ph':float(arr[3])}
+        #mydict = { "temperature": 77, "humidity": 45, "timestamp" : int(ts*1000.0)}
+        x = mycol.insert_one(mydict)

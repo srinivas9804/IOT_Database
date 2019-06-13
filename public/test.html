@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Testing Layouts</title>
+
+</head>
+<style type="text/css">
+	.container {
+		display: grid;
+		grid-template-columns: 3fr 4fr 4fr;
+		grid-auto-rows: auto;
+	}
+	.item1{
+		background-color: #eee;
+		padding: 25px;
+		grid-row-start: 1;
+		grid-row-end: 10;
+		grid-column-start: 1;
+		grid-column-end: 2;
+	}
+	.item2{
+		background-color: #ddd;
+		padding: 25px;
+		grid-row-start: 1;
+		grid-row-end: 5;
+		grid-column-start: 2;
+		grid-column-end: 3;
+	}
+	.item3{
+		background-color: #dd4;
+		padding: 25px;
+		grid-row-start: 1;
+		grid-row-end: 5;
+		grid-column-start: 3;
+		grid-column-end: 4;
+	}
+	.item4{
+		background-color: #ee3;
+		padding: 25px;
+		grid-row-start: 5;
+		grid-row-end: 10;
+		grid-column-start: 2;
+		grid-column-end: 3;
+	}
+	.item5{
+		background-color: #00e;
+		padding: 25px;
+		grid-row-start: 5;
+		grid-row-end: 10;
+		grid-column-start: 3;
+		grid-column-end: 4;
+	}
+</style>
+
+<body>
+	<div class="container">
+		<div class="item1">
+			<table id="table">
+  				<thead>
+    				<tr>
+      					<th class="th-sm">Time
+      					</th>
+     	 				<th class="th-sm">Temperature
+      					</th>
+      					<th class="th-sm">Moisture
+      					</th>
+      					<th class="th-sm">pH
+ 	     				</th>
+    	  				<th class="th-sm">Light
+      					</th>
+    				</tr>
+  				</thead>
+			</table>
+		</div>
+		<div class="item2">
+			item2
+		</div>
+		<div class="item3">
+			item3
+		</div>
+		<div class="item4">
+			item4
+		</div>
+		<div class="item5">
+			item5
+		</div>
+	</div>
+</body>
+</html>
