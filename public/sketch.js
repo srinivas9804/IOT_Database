@@ -1,39 +1,42 @@
+
+/*
+setTimeout(() => {
+  location.reload();
+}, 30000);
+*/
+let lat, lon, sensorData;
+
+
+if ('geolocation' in navigator) {
+  console.log('geolocation available');
+  navigator.geolocation.getCurrentPosition(async position => {
+    lat = position.coords.latitude;
+    lon = position.coords.longitude;
+    const api_url = `/weather/${lat},${lon}`;
+    const response = await fetch(api_url);
+    const json = await response.json();
+    const temp = document.getElementById('tempValue');
+    const humid = document.getElementById('humidValue');
+    temp.textContent = json.currently.temperature;
+    humid.textContent = json.currently.humidity;
+    console.log(json);
+  });
+}
+else{
+  console.log('geolocation not available');
+}
 getData();
 
 async function getData(){
   const response = await fetch('/api');
-  const data = await response.json();
-  console.log(data);
-  if(data.length > 0){
+  sensorData = await response.json();
+  console.log(sensorData.length);
+  if(sensorData.length > 0){
     table = document.getElementById('table');
-    console.log(data[data.length-1].temperature);
-    /*
-    table.style.width  = '100px';
-    table.style.border = '1px solid black';
-    const header = table.createTHead();
-    var row = header.insertRow(0);
-    var timestamp = row.insertCell(0);
-    var temp = row.insertCell(1);
-    var moisture = row.insertCell(2);
-    var ph = row.insertCell(3);
-    var light = row.insertCell(4);
-          
-    temp.textContent = 'Temperature';
-    moisture.textContent = 'Moisture';
-    timestamp.textContent = "Time";
-    ph.textContent = "pH";
-    light.textContent = "Light";
 
-    temp.style.border = '1px solid black';
-    moisture.style.border = '1px solid black';
-    timestamp.style.border = '1px solid black';
-    ph.style.border = '1px solid black';
-    light.style.border = '1px solid black';
-    */
-    ctr = 0;
-    console.log(new Date(data[0].timestamp).toLocaleString());
-    console.log(new Date(data[data.length-1].timestamp).toLocaleString());
-    for(item of data){
+    ctr = 0;//ctr controls the number of elements displayed in the table
+    for(var i = sensorData.length-1; i>=0; i--){
+      item = sensorData[i];
       ctr++;
       if (ctr > 20) {break;}
       row = table.insertRow();
@@ -43,14 +46,6 @@ async function getData(){
       ph = row.insertCell(3);
       light = row.insertCell(4);
 
-      /*
-      temp.style.border = '1px solid black';
-      moisture.style.border = '1px solid black';
-      timestamp.style.border = '1px solid black';
-      ph.style.border = '1px solid black';
-      light.style.border = '1px solid black';
-      */
-
       temp.textContent = `${item.temperature}`;
       moisture.textContent = `${item.moisture}`;
       ph.textContent = `${item.ph}`;
@@ -58,14 +53,32 @@ async function getData(){
       const dateString = new Date(item.timestamp).toLocaleString();
       timestamp.textContent = dateString;
     }
-    chartIt(data);
+    chartIt();
   }
   else{
     document.write('<H1>No data to show</H1>');
   }  
 }
 
-async function chartIt(data){
+async function chartIt(){
+  var parent1 = document.getElementById('chart1');
+  var canvas1 = document.getElementById('ch1');
+  var parent2 = document.getElementById('chart2');
+  var canvas2 = document.getElementById('ch2');
+  var parent3 = document.getElementById('chart3');
+  var canvas3 = document.getElementById('ch3');
+  var parent4 = document.getElementById('chart4');
+  var canvas4 = document.getElementById('ch4');
+
+  canvas1.width = parent1.offsetWidth;
+  canvas1.height = parent1.offsetHeight;
+  canvas2.width = parent2.offsetWidth;
+  canvas2.height = parent2.offsetHeight;
+  canvas3.width = parent3.offsetWidth;
+  canvas3.height = parent3.offsetHeight;
+  canvas4.width = parent4.offsetWidth;
+  canvas4.height = parent4.offsetHeight;
+  
   var ctx1 = document.getElementById('ch1').getContext('2d');
   var ctx2 = document.getElementById('ch2').getContext('2d');
   var ctx3 = document.getElementById('ch3').getContext('2d');
@@ -77,13 +90,12 @@ async function chartIt(data){
   const light =[];
   const timestamp = [];
 
-  for(item of data){
+  for(item of sensorData){
     temperature.unshift(item.temperature);
     moisture.unshift(item.moisture);
     ph.unshift(item.ph);
     light.unshift(item.light);
     timestamp.unshift(item.timestamp);
-    console.log("shaata" + item.timestamp);
   }
 
 
@@ -98,7 +110,8 @@ async function chartIt(data){
             backgroundColor: 'rgba(255, 99, 132, 0.2)',
             borderColor: 
                 'rgba(255, 99, 132, 1)',
-            borderWidth: 1
+            borderWidth: 1,
+            pointRadius: 0
         }]
     },
     options: {
@@ -107,10 +120,9 @@ async function chartIt(data){
                 type: 'time',
                 distribution:'series',
                 time: {
-                  unit: 'second',
-                },
-                ticks:{
-                  source: 'auto'
+                  displayFormats: {
+                        second: 'h:mm:ss'
+                    }
                 }
             }]
         }
@@ -128,7 +140,8 @@ async function chartIt(data){
             backgroundColor: 'rgba(54, 162, 235, 0.2)',
             borderColor: 
                 'rgba(54, 162, 235, 1)',
-            borderWidth: 1
+            borderWidth: 1,
+            pointRadius: 0
         }]
     },
     options: {
@@ -138,7 +151,7 @@ async function chartIt(data){
                 distribution:'series',
                 time: {
                     displayFormats: {
-                        second: 'h:mm:ss a'
+                        second: 'h:mm:ss'
                     }
                 }
             }]
@@ -157,7 +170,8 @@ async function chartIt(data){
             backgroundColor: 'rgba(255, 206, 86, 0.2)',
             borderColor: 
                 'rgba(255, 206, 86, 1)',
-            borderWidth: 1
+            borderWidth: 1,
+            pointRadius: 0
         }]
     },
     options: {
@@ -167,7 +181,7 @@ async function chartIt(data){
                 distribution:'series',
                 time: {
                     displayFormats: {
-                        second: 'h:mm:ss a'
+                        second: 'h:mm:ss'
                     }
                 }
             }]
@@ -186,7 +200,8 @@ async function chartIt(data){
             backgroundColor: 'rgba(75, 192, 192, 0.2)',
             borderColor: 
                 'rgba(75, 192, 192, 1)',
-            borderWidth: 1
+            borderWidth: 1,
+            pointRadius: 0
         }]
     },
     options: {
@@ -196,7 +211,7 @@ async function chartIt(data){
                 distribution:'series',
                 time: {
                     displayFormats: {
-                        second: 'h:mm:ss a'
+                        second: 'h:mm:ss'
                     }
                 }
             }]
