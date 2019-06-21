@@ -46,11 +46,22 @@ h1{
 	grid-column-start: 1;
 	grid-column-end: 2;
 }
-table, th, td{
+table{
 	border: 1px solid black;
+	width: 98%; 
+  	border-collapse: collapse; 
 }
-th {
-  text-align: left;
+tr:nth-of-type(odd) { 
+  background: #eee; 
+}
+th { 
+  background: #333; 
+  color: white; 
+  font-weight: bold; 
+}
+td, th { 
+  border: 1px solid #ccc; 
+  text-align: left; 
 }
 #chart1{
 	padding: 5px;
@@ -58,13 +69,19 @@ th {
 	grid-row-end: 5;
 	grid-column-start: 2;
 	grid-column-end: 3;
-}
+	position: relative; 
+	height:100%; 
+	width:98%;
+	}
 #chart2{
 	padding: 5px;
 	grid-row-start: 1;
 	grid-row-end: 5;
 	grid-column-start: 3;
 	grid-column-end: 4;
+	position: relative; 
+	height:100%; 
+	width:98%;
 }
 #chart3{
 	padding: 5px;
@@ -72,6 +89,10 @@ th {
 	grid-row-end: 10;
 	grid-column-start: 2;
 	grid-column-end: 3;
+	position: relative;
+	position: relative; 
+	height:100%; 
+	width:98%;
 }
 #chart4{
 	padding: 5px;
@@ -79,4 +100,8 @@ th {
 	grid-row-end: 10;
 	grid-column-start: 3;
 	grid-column-end: 4;
+	position: relative;
+	position: relative; 
+	height:100%; 
+	width:98%;
 }

@@ -3,13 +3,13 @@
   <head>
     <title>Sensor Data</title>
     <link rel="stylesheet" type="text/css" href="style.css" />
-    <script src = "https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.bundle.min.js"></script>
+    <script src="/Chart.bundle.min.js"></script>
   </head>
   <body>
   	<div class='title'>
   		<h1 id='titleLab'>Sensor Data</h1>	
   		<div id='currentWeather'>
-  			<p>Current Temperature at <span id='location'></span>  is <span id='tempValue'></span> &#8451; and the Current Humidity is <span id='humidValue'></span> g/m3</p>
+  			<p id='weatherText'>Current Temperature at <span id='location'></span>  is <span id='tempValue'></span> &#8451; and the Current Humidity is <span id='humidValue'></span> g/m3</p>
   		</div>
   		<div id= 'scale'>
   			<button class='buttonScale' id='dayButton' onclick="onClickListener(this)">1 D</button>
@@ -26,7 +26,7 @@
     				<tr>
       					<th>Time
 	      				</th>
-    	  				<th>Temperature
+    	  				<th>Temp
       					</th>
       					<th>Moisture
       					</th>
@@ -38,20 +38,20 @@
 	  			</thead>
 			</table> 		
   		</div>
-  	  	<div id='chart1'>
-  	  		<canvas id="ch1" width="100%" height="70%">
+  	  	<div id='chart1' >
+  	  		<canvas id="ch1">
   	  		</canvas>
     	</div>
     	<div id='chart2'>
-    		<canvas id="ch2" width="100%" height="70%">
+    		<canvas id="ch2">
   	  		</canvas>
     	</div>
     	<div id='chart3'>
-    		<canvas id="ch3" width="100%" height="70%">
+    		<canvas id="ch3">
   	  		</canvas>
     	</div>
     	<div id='chart4'>
-    		<canvas id="ch4" width="100%" height="70%">
+    		<canvas id="ch4">
   	  		</canvas>
     	</div>	
   	</div>

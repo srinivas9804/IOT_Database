@@ -9,7 +9,7 @@ ts = dt.timestamp()#make sure to divide timestamp by 1000 to obtain
 print(ts," ", dt)
 
 if __name__ == '__main__':
-    myclient = pymongo.MongoClient("mongodb://testUser:135246798@localhost:27017/mydb")#:27017
+    myclient = pymongo.MongoClient("mongodb://testUser:123456@localhost:27017/mydb")#:27017
     mydb = myclient['mydb']
     mycol = mydb["Sensor"]
     
