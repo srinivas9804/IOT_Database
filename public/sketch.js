@@ -91,12 +91,14 @@ async function getData(){//fetching data from the node server, which in turn get
       ctr++;
       if (ctr > 20) {break;}// change the threshold value to get more/less data in the table
       row = table.insertRow();
-      timestamp = row.insertCell(0);
-      temp = row.insertCell(1);
-      moisture = row.insertCell(2);
-      ph = row.insertCell(3);
-      light = row.insertCell(4);
+      id = row.insertCell(0);
+      timestamp = row.insertCell(1);
+      temp = row.insertCell(2);
+      moisture = row.insertCell(3);
+      ph = row.insertCell(4);
+      light = row.insertCell(5);
 
+      id.textContent = `${item.sensorID}`;
       temp.textContent = `${item.temperature}`;
       moisture.textContent = `${item.moisture}`;
       ph.textContent = `${item.ph}`;
