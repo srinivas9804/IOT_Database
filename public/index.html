@@ -4,37 +4,55 @@
     <title>Sensor Data</title>
     <link rel="stylesheet" type="text/css" href="style.css" />
     <script src="/Chart.bundle.min.js"></script>
+    <link rel="stylesheet" href="/bootstrap.min.css">
+    <script src="/jquery.slim.min.js"></script>
+	<script src="/bootstrap.bundle.min.js"></script>
   </head>
   <body>
   	<div class='title'>
-  		<h1 id='titleLab'>Sensor Data</h1>	
+  		<h1 id='titleLabel'>Sensor Data</h1>	
   		<div id='currentWeather'>
   			<p id='weatherText'>Current Temperature at <span id='location'></span>  is <span id='tempValue'></span> &#8451; and the Current Humidity is <span id='humidValue'></span> g/m3</p>
   		</div>
-  		<div id= 'scale'>
-  			<button class='buttonScale' id='dayButton' onclick="onClickListener(this)">1 D</button>
-  			<button class='buttonScale' id='weekButton' onclick="onClickListener(this)">1 W</button>
-  			<button class='buttonScale' id='monthButton' onclick="onClickListener(this)">1 M</button>
-  			<button class='buttonScale' id='yearButton' onclick="onClickListener(this)">1 Y</button>
-  			<button class='buttonScale' id='maxButton' onclick="onClickListener(this)">Max</button>
+  		<div id= 'axisScale'>
+  			<div class="btn-group">
+  				<button type="button" class="btn btn-primary">SN:</button>
+  				<button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    				<span class="sr-only">Toggle Dropdown</span>
+  				</button>
+  				<div class="dropdown-menu">
+    				<a class="dropdown-item" href="#" id="allNodes" onclick="onClickNodeListener(this)">All</a>
+    				<div class="dropdown-divider"></div>
+    				<a class="dropdown-item" href="#" id="node1" onclick="onClickNodeListener(this)">SN1</a>
+    				<div class="dropdown-divider"></div>
+    				<a class="dropdown-item" href="#" id="node2" onclick="onClickNodeListener(this)">SN2</a>
+    				<div class="dropdown-divider"></div>
+    				<a class="dropdown-item" href="#" id="node3" onclick="onClickNodeListener(this)">SN3</a>
+  				</div>
+			</div>
+  			<button class='buttonScale' id='dayButton' onclick="onClickScaleListener(this)">1 D</button>
+  			<button class='buttonScale' id='weekButton' onclick="onClickScaleListener(this)">1 W</button>
+  			<button class='buttonScale' id='monthButton' onclick="onClickScaleListener(this)">1 M</button>
+  			<button class='buttonScale' id='yearButton' onclick="onClickScaleListener(this)">1 Y</button>
+  			<button class='buttonScale' id='maxButton' onclick="onClickScaleListener(this)">Max</button>
   		</div>
   	</div>
-  	<div class='container'>
+  	<div class='dataContainer' id='dataContainerID'>
   		<div class='dataTable'>
- 			<table id="table" width="100%">
+ 			<table class="table table-striped table-bordered table-sm" id="table">
   				<thead>
     				<tr>
-    					<th>ID
+    					<th scope="col">id
     					</th>
-      					<th>Time
+      					<th scope="col">Time
 	      				</th>
-    	  				<th>Temp
+    	  				<th scope="col">Temp
       					</th>
-      					<th>Moisture
+      					<th scope="col">Moisture
       					</th>
-      					<th>pH
+      					<th scope="col">pH
 	      				</th>
-    	  				<th >Light
+    	  				<th scope="col">Light
       					</th>
     				</tr>
 	  			</thead>
@@ -57,6 +75,9 @@
   	  		</canvas>
     	</div>	
   	</div>
-  	<script src="sketch.js"></script>    
+  	<script src="sketch.js"></script>   
+  	<div id = "noDataMessage">
+  		<h3> No Data to show</h3>
+  	</div>
   </body>
 </html>

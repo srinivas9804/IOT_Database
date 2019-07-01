@@ -16,7 +16,14 @@ let maxButton = document.getElementById('maxButton');
 let buttonArr = [dayButton,weekButton,monthButton,yearButton,maxButton]; //just for easier iteration 
 let indexCtr = 4;
 maxButton.style.color = '#fff';
-maxButton.style.background = '#36A2EB';
+maxButton.style.background = '#007bff';
+
+let allNodes = document.getElementById('allNodes');
+let sn1 = document.getElementById('node1');
+let sn2 = document.getElementById('node2');
+let sn3 = document.getElementById('node3');
+let nodeCtr = 0;
+
 
 if ('geolocation' in navigator) {//Passing lat and long to server. Gets the local weather and updates 
   console.log('geolocation available');
@@ -33,18 +40,47 @@ if ('geolocation' in navigator) {//Passing lat and long to server. Gets the loca
     humid.textContent = json.currently.humidity;
     location.textContent = json.timezone
   });
-
 }
 else{
   const weatherText = document.getElementById('weatherText');
   weatherText.textContent = 'Current Weather not available';
   console.log('geolocation not available');
 }
-getData();
+getData('all');
 
+function onClickNodeListener(button){
+  let tempCtr;
+  if(button == allNodes){
+    tempCtr = 0;
+  }
+  else if(button == sn1){
+    tempCtr = 1;
+  }
+  else if(button == sn2){
+    tempCtr = 2;
+  }
+  else if(button == sn3){
+    tempCtr = 3;
+  }
+  if(tempCtr != nodeCtr){
+    nodeCtr = tempCtr;
+    if(nodeCtr == 0){
+      getData('all');
+    }
+    else if(nodeCtr == 1){
+      getData('SN1');
+    }
+    else if(nodeCtr == 2){
+      getData('SN2');
+    }
+    else if(nodeCtr == 3){
+      getData('SN3');
+    } 
+  }
+}
 
-
-function onClickListener(button){//changing the timescale of the data 
+function onClickScaleListener(button){//changing the timescale of the data 
+  let newCtr;
   if(button == dayButton){
     newCtr = 0;
   }
@@ -65,10 +101,10 @@ function onClickListener(button){//changing the timescale of the data
     for(var i =0; i < buttonArr.length; i++){
       if(i == newCtr){
         buttonArr[i].style.color = '#fff';
-        buttonArr[i].style.background = '#36A2EB';
+        buttonArr[i].style.background = '#007bff';
       }
       else{
-        buttonArr[i].style.color = '#36A2EB';
+        buttonArr[i].style.color = '#007bff';
         buttonArr[i].style.background = '#fff';
       }
     }
@@ -78,18 +114,27 @@ function onClickListener(button){//changing the timescale of the data
 }
 
 
-async function getData(){//fetching data from the node server, which in turn gets the data stored in the mongo-db
-  const response = await fetch('/api');
+async function getData(sensorNode){//fetching data from the node server, which in turn gets the data stored in the mongo-db
+  const response = await fetch(`/api/${sensorNode}`);
   sensorData = await response.json();
   console.log('Data length = ' + sensorData.length);
   if(sensorData.length > 0){
-    table = document.getElementById('table');
+    dataContainer = document.getElementById('dataContainerID');
+    errorMessage = document.getElementById('noDataMessage');
+    dataContainer.style.visibility = 'visible';
+    dataContainer.style.display = 'grid';
+    errorMessage.style.visibility = 'hidden';
+    errorMessage.style.display = 'none';
 
+    const table = document.getElementById('table');
+    for(var i = table. rows. length - 1; i > 0; i--){
+      table. deleteRow(i);
+    }
     ctr = 0;//ctr controls the number of elements displayed in the table
     for(var i = sensorData.length-1; i>=0; i--){
       item = sensorData[i];
       ctr++;
-      if (ctr > 20) {break;}// change the threshold value to get more/less data in the table
+      if (ctr > 15) {break;}// change the threshold value to get more/less data in the table
       row = table.insertRow();
       id = row.insertCell(0);
       timestamp = row.insertCell(1);
@@ -106,10 +151,26 @@ async function getData(){//fetching data from the node server, which in turn get
       const dateString = new Date(item.timestamp).toLocaleString();
       timestamp.textContent = dateString;
     }
-    chartIt();
+    if(tempChart == null){
+      chartIt();
+    }
+    else{
+      updateChart();
+    }
   }
   else{
-    document.write('<H1>No data to show</H1>');
+    const table = document.getElementById('table');
+    for(var i = table. rows. length - 1; i > 0; i--){
+      table. deleteRow(i);
+    }
+    if(tempChart != null){
+      dataContainer = document.getElementById('dataContainerID');
+      errorMessage = document.getElementById('noDataMessage');
+      dataContainer.style.visibility = 'hidden';
+      dataContainer.style.display = 'none';
+      errorMessage.style.visibility = 'visible';
+      errorMessage.style.display = 'grid';
+    }
   }  
 }
 
@@ -171,7 +232,7 @@ async function chartIt(){//function that creates the 4 charts
             backgroundColor: 'rgba(255, 99, 132, 0.2)',
             borderColor: 'rgba(255, 99, 132, 1)',
             borderWidth: 1,
-            pointRadius: 1.5
+            pointRadius: 0
         }]
     },
     options: {
@@ -204,7 +265,7 @@ async function chartIt(){//function that creates the 4 charts
             backgroundColor: 'rgba(54, 162, 235, 0.2)',
             borderColor: 'rgba(54, 162, 235, 1)',
             borderWidth: 1,
-            pointRadius: 1.5
+            pointRadius: 0
         }]
     },
     options: {
@@ -237,7 +298,7 @@ async function chartIt(){//function that creates the 4 charts
             backgroundColor: 'rgba(255, 206, 86, 0.2)',
             borderColor: 'rgba(255, 206, 86, 1)',
             borderWidth: 1,
-            pointRadius: 1.5
+            pointRadius: 0
         }]
     },
     options: {
@@ -270,7 +331,7 @@ async function chartIt(){//function that creates the 4 charts
             backgroundColor: 'rgba(75, 192, 192, 0.2)',
             borderColor: 'rgba(75, 192, 192, 1)',
             borderWidth: 1,
-            pointRadius: 1.5  
+            pointRadius: 0
         }]
     },
     options: {
@@ -304,6 +365,7 @@ function updateChart(){
     refTime = 86400000;//86400000 = 1 day
     for (var i = chartArr.length - 1; i >= 0; i--) {
       chartArr[i].options.scales.xAxes[0].time.unit = 'hour';
+      chartArr[i].options.scales.xAxes[0].time.displayFormats.hour = 'Do MMM hA';
     }
   }
   else if(indexCtr == 1){
