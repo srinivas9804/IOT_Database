@@ -18,6 +18,8 @@ let indexCtr = 4;
 maxButton.style.color = '#fff';
 maxButton.style.background = '#007bff';
 
+let nodeLabel = document.getElementById('nodeButtonLabel');
+nodeLabel.textContent = 'SN: 1';
 let allNodes = document.getElementById('allNodes');
 let sn1 = document.getElementById('node1');
 let sn2 = document.getElementById('node2');
@@ -46,21 +48,25 @@ else{
   weatherText.textContent = 'Current Weather not available';
   console.log('geolocation not available');
 }
-getData('all');
+getData('SN1');
 
 function onClickNodeListener(button){
   let tempCtr;
   if(button == allNodes){
     tempCtr = 0;
+    nodeLabel.textContent = 'SN: all';
   }
   else if(button == sn1){
     tempCtr = 1;
+    nodeLabel.textContent = 'SN: 1';
   }
   else if(button == sn2){
     tempCtr = 2;
+    nodeLabel.textContent = 'SN: 2';
   }
   else if(button == sn3){
     tempCtr = 3;
+    nodeLabel.textContent = 'SN: 3';
   }
   if(tempCtr != nodeCtr){
     nodeCtr = tempCtr;
