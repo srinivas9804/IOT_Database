@@ -22,10 +22,23 @@ app.get('/jquery.slim.min.js', function(req, res) {
 app.get('/bootstrap.bundle.min.js', function(req, res) {
   res.sendFile(__dirname + '/node_modules/bootstrap/dist/js/bootstrap.bundle.min.js');
 });
-let dbo 
+
+app.get('/weather/:latlon', async (request, response) => {
+  //DarkSky allows for upto 1000 free api calls per day. If more than this is required consider payment or another free api
+  //console.log(request.params);
+  const latlon = request.params.latlon.split(',');
+  const lat = latlon[0];
+  const lon = latlon[1];
+  const api_url = `https://api.darksky.net/forecast/` + darksky_key + `/${lat},${lon}?units=si`;
+  const fetch_response = await fetch(api_url);
+  const weatherJson = await fetch_response.json();
+  response.json(weatherJson);
+});
+
+let dbo;
 MongoClient.connect(url, { useNewUrlParser: true }, function(err, db) {  // To insert a document into the collection
   if (err) throw err;
-  dbo = db.db("mydb");
+  dbo = db.db("mydb"); 
 });
 
 app.get('/api/:sensorNode', (request, response) => {
@@ -57,23 +70,42 @@ app.post('/api', (request, response) => {
   const timestamp = Date.now();
   data.timestamp = timestamp;
   dbo.collection('Sensor').insertOne(data, (err, res) => {
-  if (err) {
-    throw err;
-  }
-  else 
-    console.log('Added element to collection');
+    if (err) {
+      throw err;
+    }
+    else{ 
+      console.log('Added element to Soil collection');
+    }
   });
   response.json(data);
 });
 
-app.get('/weather/:latlon', async (request, response) => {
-  //DarkSky allows for upto 1000 free api calls per day. If more than this is required consider payment or another free api
-  //console.log(request.params);
-  const latlon = request.params.latlon.split(',');
-  const lat = latlon[0];
-  const lon = latlon[1];
-  const api_url = `https://api.darksky.net/forecast/` + darksky_key + `/${lat},${lon}?units=si`;
-  const fetch_response = await fetch(api_url);
-  const weatherJson = await fetch_response.json();
-  response.json(weatherJson);
+app.post('/app', (request,response) => {
+  const data = request.body;
+  dbo.collection('AirTracker').insertOne(data, (err,res) =>{
+    if (err) {
+      console.log(err);
+      if(err.code == 11000)
+      response.json({message:"something broke", status:11000, data: data});
+      return;
+    }
+    else{ 
+      console.log('Added element to AirTracker collection');
+      response.json({message:"Data added", status:200, data:data});
+    }
+  }); 
 });
+
+app.get('/app/mostRecent/:macAddress',(request, response) => {
+  const macAddress = request.params.macAddress;
+  dbo.collection('AirTracker').findOne({"macAddress": macAddress}, (err,data) =>{
+    if (err) {
+        console.log('error in get')
+        response.end(); 
+        return;
+      }
+      response.json(data);
+  });
+});
+
+

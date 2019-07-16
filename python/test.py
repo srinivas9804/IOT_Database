@@ -15,6 +15,7 @@ if __name__ == '__main__':
      
     while(True):
         line = ser.readlines(1)
+        #readLines() waits until there's input to read
         print(type(line))
         string = line[0].decode("utf-8")
         print(string)

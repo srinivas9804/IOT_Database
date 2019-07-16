@@ -4,6 +4,20 @@ setTimeout(() => {
   location.reload();
 }, 30000);
 */
+/*
+Trying post to use with the airtracker application
+const timestampTest = 100000;
+const temperatureTest = 100;
+data = {timestampTest, temperatureTest};
+const options = {
+  method: 'POST',
+  body: JSON.stringify(data),
+  headers: {
+    'Content-Type': 'application/json'
+  }
+};
+*/
+// fetch('/app', options);
 let lat, lon, sensorData;
 let tempChart, moistChart, lightChart, phChart;
 let chartArr;
