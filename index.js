@@ -1,3 +1,9 @@
+/**
+Pretty standard node.js script. Using express to set up ports and apis
+Using Mongodb to store data.
+'/api' is for website
+'/app' is for the android app
+*/
 const express = require('express');
 const MongoClient = require('mongodb').MongoClient;
 const fetch = require('node-fetch');
@@ -23,9 +29,9 @@ app.get('/bootstrap.bundle.min.js', function(req, res) {
   res.sendFile(__dirname + '/node_modules/bootstrap/dist/js/bootstrap.bundle.min.js');
 });
 
+//DarkSky allows for upto 1000 free api calls per day. If more than this is required consider payment or another free api
+//console.log(request.params);
 app.get('/weather/:latlon', async (request, response) => {
-  //DarkSky allows for upto 1000 free api calls per day. If more than this is required consider payment or another free api
-  //console.log(request.params);
   const latlon = request.params.latlon.split(',');
   const lat = latlon[0];
   const lon = latlon[1];
@@ -105,6 +111,18 @@ app.get('/app/mostRecent/:macAddress',(request, response) => {
         return;
       }
       response.json(data);
+  });
+});
+
+app.get('/app/:macAddress',(request, response) => {
+  const macAddress = request.params.macAddress;
+  dbo.collection("AirTracker").find({"macAddress": macAddress}).toArray((err, data) => {
+    if (err) {
+      console.log('error in get')
+      response.end(); 
+      return;
+    }
+    response.json(data);  
   });
 });
 

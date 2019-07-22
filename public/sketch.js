@@ -1,23 +1,3 @@
-
-/*
-setTimeout(() => {
-  location.reload();
-}, 30000);
-*/
-/*
-Trying post to use with the airtracker application
-const timestampTest = 100000;
-const temperatureTest = 100;
-data = {timestampTest, temperatureTest};
-const options = {
-  method: 'POST',
-  body: JSON.stringify(data),
-  headers: {
-    'Content-Type': 'application/json'
-  }
-};
-*/
-// fetch('/app', options);
 let lat, lon, sensorData;
 let tempChart, moistChart, lightChart, phChart;
 let chartArr;
@@ -29,6 +9,7 @@ let yearButton = document.getElementById('yearButton');
 let maxButton = document.getElementById('maxButton');
 let buttonArr = [dayButton,weekButton,monthButton,yearButton,maxButton]; //just for easier iteration 
 let indexCtr = 4;
+//probably should not hard code colors and use variables instead...
 maxButton.style.color = '#fff';
 maxButton.style.background = '#007bff';
 
@@ -40,8 +21,8 @@ let sn2 = document.getElementById('node2');
 let sn3 = document.getElementById('node3');
 let nodeCtr = 0;
 
-
-if ('geolocation' in navigator) {//Passing lat and long to server. Gets the local weather and updates 
+//Passing lat and long to server. Gets the local weather and updates 
+if ('geolocation' in navigator) {
   console.log('geolocation available');
   navigator.geolocation.getCurrentPosition(async position => {
     lat = position.coords.latitude;
@@ -62,8 +43,10 @@ else{
   weatherText.textContent = 'Current Weather not available';
   console.log('geolocation not available');
 }
+
 getData('SN1');
 
+//Choosing the SensorNode
 function onClickNodeListener(button){
   let tempCtr;
   if(button == allNodes){
@@ -99,7 +82,8 @@ function onClickNodeListener(button){
   }
 }
 
-function onClickScaleListener(button){//changing the timescale of the data 
+//changing the timescale of the data 
+function onClickScaleListener(button){
   let newCtr;
   if(button == dayButton){
     newCtr = 0;
@@ -116,7 +100,6 @@ function onClickScaleListener(button){//changing the timescale of the data
   else{
     newCtr = 4;
   }
-
   if(newCtr != indexCtr){
     for(var i =0; i < buttonArr.length; i++){
       if(i == newCtr){
@@ -133,8 +116,8 @@ function onClickScaleListener(button){//changing the timescale of the data
   }
 }
 
-
-async function getData(sensorNode){//fetching data from the node server, which in turn gets the data stored in the mongo-db
+//fetching data from the node server, which in turn gets the data stored in the mongo-db
+async function getData(sensorNode){
   const response = await fetch(`/api/${sensorNode}`);
   sensorData = await response.json();
   console.log('Data length = ' + sensorData.length);
@@ -150,11 +133,13 @@ async function getData(sensorNode){//fetching data from the node server, which i
     for(var i = table. rows. length - 1; i > 0; i--){
       table. deleteRow(i);
     }
-    ctr = 0;//ctr controls the number of elements displayed in the table
+    //ctr controls the number of elements displayed in the table
+    ctr = 0;
+    threshold = 15;//change the threshold value to get more/less data in the table
     for(var i = sensorData.length-1; i>=0; i--){
       item = sensorData[i];
       ctr++;
-      if (ctr > 15) {break;}// change the threshold value to get more/less data in the table
+      if (ctr > threshold) {break;}
       row = table.insertRow();
       id = row.insertCell(0);
       timestamp = row.insertCell(1);
